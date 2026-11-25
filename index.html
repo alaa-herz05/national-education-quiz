@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اختبر نفسك - التربية الوطنية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#18222f; --muted:#5d6b7b; --line:#d9e0ea;
+  --brand:#243447; --brand-2:#34506e; --gold:#b99a6b; --soft:#eaf0f7;
+  --bean-a:#243447; --bean-b:#e9dcc6;
+  --ok:#1b8a5a; --ok-bg:#e7f5ee; --bad:#c23a34; --bad-bg:#fbeceb;
+  --shadow:0 1px 2px rgba(20,35,45,.06),0 6px 20px rgba(20,35,45,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e141b; --card:#17202b; --ink:#e9eef5; --muted:#93a1b2; --line:#283647;
+    --brand:#9ec3ea; --brand-2:#7fb0e3; --gold:#d9c29a; --soft:#1d2a38; --bean-a:#9ec3ea; --bean-b:#d9c29a;
+    --ok:#4fd199; --ok-bg:#143528; --bad:#ff7b73; --bad-bg:#3a1c1b;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e141b; --card:#17202b; --ink:#e9eef5; --muted:#93a1b2; --line:#283647;
+  --brand:#9ec3ea; --brand-2:#7fb0e3; --gold:#d9c29a; --soft:#1d2a38; --bean-a:#9ec3ea; --bean-b:#d9c29a;
+  --ok:#4fd199; --ok-bg:#143528; --bad:#ff7b73; --bad-bg:#3a1c1b;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif;line-height:1.75;font-size:17px}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+
+/* header */
+header.hero{background:linear-gradient(135deg,rgba(24,36,52,.93),rgba(47,69,96,.9));color:#fff;padding:34px 0 64px;position:relative;z-index:1}
+main.wrap,footer{position:relative;z-index:1}
+.beans{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bean{position:absolute;bottom:-60px;will-change:transform;animation:fly linear infinite}
+.bean svg{display:block;width:100%;height:100%}
+@keyframes fly{0%{transform:translate3d(0,0,0) rotate(0deg);opacity:0}10%{opacity:var(--o)}90%{opacity:var(--o)}100%{transform:translate3d(var(--dx),-115vh,0) rotate(var(--rot));opacity:0}}
+@media (prefers-reduced-motion:reduce){.bean{animation:none;bottom:auto}}
+:root[data-theme="dark"] header.hero,:root:not([data-theme="light"]) header.hero{}
+header.hero h1{margin:0 0 6px;font-size:clamp(24px,4.6vw,34px);font-weight:800;letter-spacing:.2px}
+header.hero p{margin:0;opacity:.88;font-size:16px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.theme-btn{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:14px}
+.theme-btn:hover{background:rgba(255,255,255,.26)}
+.chips-info{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chips-info span{background:rgba(255,255,255,.15);border-radius:99px;padding:3px 12px;font-size:14px}
+
+/* sticky stats */
+.stats{position:sticky;top:0;z-index:20;margin-top:-40px}
+.stats-card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:12px 16px}
+.stat-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;align-items:center;min-width:64px;line-height:1.2}
+.stat b{font-size:22px;font-weight:800}
+.stat small{color:var(--muted);font-size:12.5px}
+.stat.ok b{color:var(--ok)} .stat.bad b{color:var(--bad)}
+.bar{flex:1;min-width:140px}
+.bar-top{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
+.track{height:10px;background:var(--soft);border-radius:99px;overflow:hidden;display:flex}
+.track i{display:block;height:100%;transition:width .35s ease}
+.track .t-ok{background:var(--ok)} .track .t-bad{background:var(--bad)}
+
+/* toolbar */
+.toolbar{margin:18px 0 8px;display:flex;flex-direction:column;gap:10px}
+.search{display:flex;gap:8px}
+.search input{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);outline:none}
+.search input:focus{border-color:var(--brand-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand-2) 22%,transparent)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 14px;cursor:pointer;font-size:14.5px;transition:.15s}
+.pill:hover{border-color:var(--brand-2)}
+.pill.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary{background:var(--brand)}
+:root[data-theme="dark"] .pill.on,:root:not([data-theme="light"]) .pill.on{color:#0b1317}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 14px;cursor:pointer;font-size:14.5px}
+.btn:hover{border-color:var(--brand-2)}
+.btn.danger{color:var(--bad)}
+.btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.label{font-size:13px;color:var(--muted);margin-inline-end:2px}
+.toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:14.5px;user-select:none}
+.toggle input{width:17px;height:17px;accent-color:var(--brand-2)}
+.spacer{flex:1}
+
+/* section heading */
+.sec-title{margin:30px 0 10px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--brand)}
+.sec-title::before{content:"";width:6px;height:24px;border-radius:4px;background:var(--gold)}
+.sec-title small{font-weight:600;color:var(--muted);font-size:13px}
+
+/* question card */
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 18px 16px;margin:0 0 14px;scroll-margin-top:150px;transition:border-color .2s,background .2s}
+.q.correct{border-color:var(--ok)} .q.wrong{border-color:var(--bad)}
+.q-head{display:flex;gap:12px;align-items:flex-start}
+.num{flex:none;min-width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--brand);font-weight:800;display:grid;place-items:center;font-size:17px;padding:0 6px}
+.q.correct .num{background:var(--ok);color:#fff} .q.wrong .num{background:var(--bad);color:#fff}
+.stem{font-weight:700;font-size:18.5px;line-height:1.7;margin:0;flex:1;padding-top:3px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 2px;padding-inline-start:52px}
+.tag{font-size:12.5px;border-radius:99px;padding:1px 10px;background:var(--soft);color:var(--muted)}
+.tag.warn{background:color-mix(in srgb,var(--gold) 18%,transparent);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.opts{display:grid;gap:9px;margin:12px 0 0}
+.opts.tf{grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;cursor:pointer;transition:.15s;font-size:17.5px;font-weight:600}
+.opt:hover:not(:disabled){border-color:var(--brand-2);background:var(--soft);transform:translateY(-1px)}
+.opt:focus-visible{outline:3px solid color-mix(in srgb,var(--brand-2) 40%,transparent);outline-offset:1px}
+.opt .ltr{flex:none;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:14.5px;font-weight:800;color:var(--muted);transition:.15s}
+.opt .txt{flex:1}
+.opt .ico{flex:none;font-size:20px;font-weight:800;display:none}
+.opt:disabled{cursor:default}
+.opt.is-correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-correct .ltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.is-correct .ico{display:block;color:var(--ok)}
+.opt.is-wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.is-wrong .ltr{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt.is-wrong .ico{display:block;color:var(--bad)}
+.opt.dim{opacity:.62}
+.tf .opt{justify-content:center;font-size:18px}
+.tf .opt .txt{flex:none}
+.fb{display:none;margin-top:12px;border-radius:12px;padding:10px 14px;font-weight:700;font-size:16.5px;animation:pop .25s ease}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-bg);color:var(--ok)}
+.fb.bad{background:var(--bad-bg);color:var(--bad)}
+.fb .ans{display:block;margin-top:3px;color:var(--ink);font-weight:600;font-size:16px}
+.fb .ans b{color:var(--ok)}
+.q-foot{display:flex;justify-content:flex-end;margin-top:8px}
+.link{background:none;border:0;color:var(--brand-2);cursor:pointer;font-size:13.5px;padding:2px 4px;text-decoration:underline;text-underline-offset:3px}
+@keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(5px)}50%{transform:translateX(-5px)}75%{transform:translateX(3px)}}
+
+.empty{text-align:center;color:var(--muted);padding:40px 0;display:none}
+footer{margin:34px 0 60px;color:var(--muted);font-size:13.5px;text-align:center}
+
+/* results modal */
+.modal{position:fixed;inset:0;background:rgba(10,20,25,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.show{display:flex}
+.sheet{background:var(--card);border-radius:20px;max-width:440px;width:100%;padding:26px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:pop .3s ease}
+.ring{width:132px;height:132px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--bad-bg) 0)}
+.ring div{width:104px;height:104px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:30px;font-weight:800}
+.sheet h2{margin:4px 0 4px}
+.sheet p{margin:0 0 16px;color:var(--muted)}
+.sheet .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+.to-top{position:fixed;inset-inline-start:16px;bottom:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);cursor:pointer;font-size:20px;display:none;z-index:15}
+.to-top.show{display:block}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  .stem{font-size:17px}
+  .opt{font-size:16.5px;padding:10px 12px}
+  .tags{padding-inline-start:0}
+  .stat{min-width:52px}
+}
+@media print{
+  header.hero,.stats,.toolbar,.to-top,.q-foot{display:none!important}
+  .q{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="beans" id="beans" aria-hidden="true"></div>
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <h1>☕ اختبر نفسك – التربية الوطنية</h1>
+        <p>أسئلة اختيار من متعدد · اضغط على الإجابة وستظهر النتيجة فوراً</p>
+      </div>
+      <button class="theme-btn" id="themeBtn" aria-label="تبديل الوضع الليلي">🌓 الوضع</button>
+    </div>
+    <div class="chips-info" id="chipsInfo"></div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap">
+    <div class="stats-card">
+      <div class="stat-row">
+        <div class="stat ok"><b id="sOk">0</b><small>صحيحة</small></div>
+        <div class="stat bad"><b id="sBad">0</b><small>خاطئة</small></div>
+        <div class="stat"><b id="sLeft">0</b><small>متبقية</small></div>
+        <div class="bar">
+          <div class="bar-top"><span id="sProg">0 / 0</span><span id="sPct">0%</span></div>
+          <div class="track"><i class="t-ok" id="tOk" style="width:0"></i><i class="t-bad" id="tBad" style="width:0"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="toolbar">
+    <div class="search"><input id="search" type="search" placeholder="🔍 ابحث في الأسئلة والخيارات…" aria-label="بحث"></div>
+    <div class="row" id="secPills"><span class="label">القسم:</span></div>
+    <div class="row" id="statusPills"><span class="label">الحالة:</span></div>
+    <div class="row">
+      <label class="toggle"><input type="checkbox" id="showAll"> إظهار الإجابات الصحيحة لكل الأسئلة</label>
+      <span class="spacer"></span>
+      <button class="btn" id="retryWrong">إعادة الأسئلة الخاطئة</button>
+      <button class="btn danger" id="resetAll">مسح الكل والبدء من جديد</button>
+    </div>
+  </div>
+
+  <div id="list"></div>
+  <div class="empty" id="empty">لا توجد أسئلة مطابقة للبحث أو الفلتر الحالي.</div>
+  <footer>الإجابات الصحيحة مأخوذة من مفتاح الإجابات (الأسئلة 1–40) ومن التظليل في الملف الأصلي (باقي الأسئلة). الأسئلة التي تحمل شارة «مستنتجة» لم يكن لها تظليل في الملف.</footer>
+</main>
+
+<button class="to-top" id="toTop" aria-label="للأعلى">↑</button>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <div class="ring" id="ring"><div id="ringTxt">0%</div></div>
+    <h2 id="mTitle">أحسنت!</h2>
+    <p id="mSub"></p>
+    <div class="btns">
+      <button class="btn primary" id="mWrong">مراجعة الخاطئة</button>
+      <button class="btn" id="mClose">إغلاق</button>
+      <button class="btn danger" id="mReset">إعادة الاختبار</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = [{"id": 1, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "العملية المنظمة لتعليم الأفراد وتنشئتهم على معارف وأفكار تساعدهم على فهم واقع وطنهم ومعرفة مؤسسات الدولة ومبادئها تُعرف بـ:", "opts": ["التنشئة السياسية", "التربية الوطنية", "الثقافة السياسية", "التنمية السياسية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 2, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "يتكون الوطن من ثلاثة عناصر رئيسية، ليس منها:", "opts": ["الأرض أو المكان", "الانتساب الوجداني للمكان", "العلاقات والروابط التي تتشكل بين أفراده عبر التاريخ", "الأحزاب السياسية والنقابات المهنية"], "ans": 3, "tf": false, "inf": false, "page": 0}, {"id": 3, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "المفهوم الذي يشير إلى الصلات والعواطف التي تربط الفرد بالقيادة والنظام الحاكم في الدولة هو:", "opts": ["الانتماء", "الولاء", "المواطنة", "الهوية القومية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 4, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "العلاقة بين المواطن والوطن التي تقوم على العضوية في المجتمع السياسي وتظهر عملياً من خلال الحقوق والواجبات هي:", "opts": ["الوطنية", "الدولة الوطنية", "المواطنة", "الهوية الوطنية"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 5, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "واحدة من الآتية تُعد من أشكال المواطنة الواردة في الكتاب:", "opts": ["المواطنة الزائفة", "المواطنة الإقليمية", "المواطنة الدولية", "المواطنة المؤقتة"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 6, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "شعور الفرد بالخصوصية والتميز نتيجة انتمائه إلى دولة أو مجتمع أو وطن واحد، وتُعد مكتسبة وقد تقوى عند مواجهة خطر مشترك:", "opts": ["الثقافة السياسية", "الهوية الوطنية", "التنمية السياسية", "التنشئة الاجتماعية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 7, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "كيان سياسي وقانوني منظم، يتكون من أفراد يعيشون على إقليم محدد، وتربطهم روابط مدنية وقانونية، وتدير شؤونهم سلطة سياسية ذات سيادة:", "opts": ["المجتمع المدني", "الدولة الوطنية", "القومية العربية", "السلطة التشريعية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 8, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "أي من الحقوق الآتية يُصنف ضمن الحقوق المدنية والسياسية للإنسان؟", "opts": ["الحق في العمل والتعليم", "الحق في مستوى معيشي لائق", "الحق في الصحة والتنمية", "الحق في الانتخاب والترشح وتأسيس الأحزاب"], "ans": 3, "tf": false, "inf": false, "page": 0}, {"id": 9, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "قدرة النظام السياسي على التكيف والتطور مع المتغيرات الداخلية والخارجية بما يحافظ على الاستقرار والاستمرار تُسمى:", "opts": ["المشاركة السياسية", "التنشئة السياسية", "التنمية السياسية", "الثقافة السياسية"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 10, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "تنظيمات وأنشطة تطوعية مستقلة وغير حكومية تعمل في المجال العام لتحقيق مصالح وأهداف مشتركة مثل الجمعيات والنقابات والأندية:", "opts": ["مؤسسات المجتمع المدني", "الأجهزة الإدارية الحكومية", "المحاكم النظامية", "المجالس التشريعية"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 11, "sec": "الفصل الأول: مفاهيم في التربية الوطنية", "stem": "مجموعة التوجهات والمشاعر والمعتقدات التي يحملها الأفراد تجاه النظام والعملية السياسية، وتتأثر بالميراث التاريخي للمجتمع هي:", "opts": ["الثقافة السياسية", "المواطنة الإيجابية", "التربية الوطنية", "الهوية القومية"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 12, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "الدولة التي تحد المملكة الأردنية الهاشمية من جهة الشمال هي:", "opts": ["العراق", "سوريا", "فلسطين", "المملكة العربية السعودية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 13, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "يمتد الأخدود الأردني من شمال غرب الأردن إلى خليج العقبة، ويشمل كلاً مما يأتي باستثناء:", "opts": ["غور نهر الأردن", "البحر الميت", "وادي عربة", "قاع الديسي"], "ans": 3, "tf": false, "inf": false, "page": 0}, {"id": 14, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "تشغل معظم مساحة الأردن شرق المرتفعات الجبلية، وتضم منخفضات وأودية مثل الجفر ووادي السرحان:", "opts": ["هضبة البادية )الهضبة الأردنية(", "مرتفعات عجلون والبلقاء", "منطقة الأغوار الوسطى", "جبال الشراه"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 15, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "يسود في منطقة وادي الأردن المناخ:", "opts": ["مناخ البحر المتوسط", "المناخ المداري الجاف", "المناخ الصحراوي البارد", "المناخ القاري الرطب"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 16, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "أكبر القطاعات استخداماً للمياه في الأردن هو قطاع:", "opts": ["الصناعة", "الاستخدام البلدي", "الزراعة", "السياحة"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 17, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "الحضارة التي استقرت جنوب وادي الحسا وامتد نفوذها من العقبة إلى وادي الحسا، وكانت بصيرة قرب الطفيلة عاصمتها هي:", "opts": ["المؤابية", "الأدومية", "العمونية", "الكنعانية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 18, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "قامت الحضارة المؤابية بين وادي الحسا ووادي الموجب، وكانت عاصمتها ذيبان، ومن أشهر ملوكها:", "opts": ["الحارث الثالث", "ميشع", "حمورابي", "تراجان"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 19, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "مدينة أردنية ورد اسمها قديماً في اتحاد المدن العشر الروماني باسم )فيلادلفيا( هي:", "opts": ["إربد", "أم قيس", "عمان", "جرش"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 20, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "قبائل عربية هاجرت من اليمن إلى بلاد الشام، واتخذت حوران مركزاً لها، واعتنقت المسيحية وتحالفت مع البيزنطيين:", "opts": ["الأنباط", "الغساسنة", "الفينيقيون", "الأموريون"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 21, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "بدأ اتصال الجيوش الإسلامية بالأردن في غزوة مؤتة التي وقعت في السنة:", "opts": ["الخامسة للهجرة", "السادسة للهجرة", "الثامنة للهجرة", "العاشرة للهجرة"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 22, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "البلدة الواقعة جنوب الأردن والتي انطلقت منها الدعوة العباسية السرية هي:", "opts": ["الشوبك", "الحميمة", "أذرح", "مؤتة"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 23, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "أعلن الشريف الحسين بن علي الثورة العربية الكبرى بعد ميثاق دمشق ومراسلات حسين - مكماهون في عام:", "opts": ["1914م", "1916م", "1918م", "1920م"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 24, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "أُعلن استقلال المملكة الأردنية الهاشمية رسمياً وأصبح الأمير عبد الله بن الحسين ملكاً عليها في تاريخ:", "opts": ["11 نيسان 1921م", "25 أيار 1946م", "10 حزيران 1916م", "8 كانون الثاني 1952م"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 25, "sec": "الفصل الثاني: جغرافية وتاريخ الأردن", "stem": "المبادرة الأردنية التي أُطلقت لتوضيح صورة الإسلام القائمة على الوسطية والاعتدال والتسامح ورفض الغلو والتطرف هي:", "opts": ["ميثاق دمشق", "رسالة عمان", "القانون الأساسي", "اتفاقية الوصاية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 26, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "يقوم النظام البرلماني في المملكة الأردنية الهاشمية على مبدأ:", "opts": ["الفصل المطلق بين السلطات", "الفصل المرن بين السلطتين التشريعية والتنفيذية مع التعاون والرقابة المتبادلة", "دمج السلطة القضائية مع السلطة التنفيذية", "تركيز جميع السلطات بيد مجلس الوزراء"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 27, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "تُعد أول وثيقة دستورية في تاريخ الدولة الأردنية الحديثة، وقد صدرت في عام:", "opts": ["القانون الأساسي لعام 1928م", "دستور عام 1947م", "دستور عام 1952م", "الميثاق الوطني لعام 1991م"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 28, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "صدر دستور عام 1952م، الذي أكد أن الأمة مصدر السلطات وأخذ بمبدأ الفصل المرن واستقلال القضاء، في عهد:", "opts": ["الملك عبد الله الأول", "الملك طلال", "الملك الحسين بن طلال", "الملك عبد الله الثاني"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 29, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "تتكون السلطة التنفيذية في النظام السياسي الأردني من:", "opts": ["مجلس الأعيان ومجلس النواب", "الملك ومجلس الوزراء", "المجلس القضائي والمحاكم النظامية", "الملك ومجلس الأمة"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 30, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "وفقاً للدستور الأردني، يكون رئيس الوزراء والوزراء مسؤولين عن السياسة العامة للدولة أمام:", "opts": ["مجلس الأعيان", "مجلس النواب", "محكمة التمييز", "الهيئة المستقلة للانتخاب"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 31, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "يبلغ عدد أعضاء مجلس الأعيان الذين يعينهم الملك وفق الدستور:", "opts": ["مساوياً لعدد أعضاء مجلس النواب", "ضعف عدد أعضاء مجلس النواب", "لا يتجاوز نصف عدد أعضاء مجلس النواب", "ربع عدد أعضاء مجلس النواب"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 32, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "يُشترط فيمن يُعين عضواً في مجلس الأعيان أن يكون قد أتم من العمر:", "opts": ["ثلاثين سنة", "خمساً وثلاثين سنة", "أربعين سنة", "خمساً وأربعين سنة"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 33, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "مدة العضوية في كل من مجلس النواب ومجلس الأعيان وفق ما يذكر الكتاب هي:", "opts": ["سنتان", "ثلاث سنوات", "أربع سنوات", "خمس سنوات"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 34, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "يُعد إقرار الموازنة العامة والاطلاع على تقارير ديوان المحاسبة من الوظائف:", "opts": ["التشريعية لمجلس الأمة", "الرقابية لمجلس الأمة", "المالية لمجلس الأمة", "القضائية لمجلس الأمة"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 35, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "الجهة التي تتولى شؤون القضاة النظاميين من تعيين وترقية ونقل وعزل وفق القانون هي:", "opts": ["مجلس الوزراء", "المجلس القضائي", "مجلس النواب", "ديوان المحاسبة"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 36, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "أي من المحاكم الآتية تُصنف ضمن المحاكم النظامية في الأردن؟", "opts": ["محكمة أمن الدولة", "المحكمة الشرعية", "محكمة التمييز", "محكمة الجمارك"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 37, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "تُصنف محكمة أمن الدولة ومحكمة الأحداث ومحكمة الشرطة ضمن:", "opts": ["المحاكم الدينية", "المحاكم النظامية", "المحاكم الخاصة", "القضاء الإداري"], "ans": 2, "tf": false, "inf": false, "page": 0}, {"id": 38, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "الجهة المسؤولة عن الإشراف على الانتخابات النيابية وإدارتها في الأردن هي:", "opts": ["الهيئة المستقلة للانتخاب", "مجلس الأعيان", "المجلس القضائي", "النقابات المهنية"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 39, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "من التحديات التي واجهت الأحزاب السياسية في الأردن كما ورد في الكتاب:", "opts": ["ضعف الديمقراطية الداخلية وتشابه البرامج", "كثرة التمويل الحكومي غير المشروط", "حظر الانتساب للأحزاب دستورياً", "اندماجها الكامل مع النقابات المهنية"], "ans": 0, "tf": false, "inf": false, "page": 0}, {"id": 40, "sec": "الفصل الثالث: النظام السياسي الأردني", "stem": "مؤسسات منظمة تمثل أصحاب المهن ومصالحهم، وتسهم في بناء الثقافة المدنية والتطور الديمقراطي هي:", "opts": ["المجالس البلدية", "النقابات المهنية", "الهيئات القضائية", "الوزارات التنفيذية"], "ans": 1, "tf": false, "inf": false, "page": 0}, {"id": 41, "sec": "الشعار والرموز الهاشمية", "stem": "يرمز الى النظام الملكي وله خمسة اضلاع هو", "opts": ["التاج", "طير العقاب", "الوشاح"], "ans": 0, "tf": false, "inf": false, "page": 1}, {"id": 42, "sec": "الشعار والرموز الهاشمية", "stem": "يرتكز على قاعده ذهبيه مرصعه بالياقوت هو", "opts": ["التاج", "العقاب", "الوشاح"], "ans": 0, "tf": false, "inf": false, "page": 1}, {"id": 43, "sec": "الشعار والرموز الهاشمية", "stem": "الذي يتربع علية التاج هو", "opts": ["التاج", "الوشاح", "العقاب"], "ans": 1, "tf": false, "inf": false, "page": 1}, {"id": 44, "sec": "الشعار والرموز الهاشمية", "stem": "الشعار الذي يمثل العرش الهاشمي هو", "opts": ["التاج", "الوشاح", "العقاب"], "ans": 1, "tf": false, "inf": false, "page": 1}, {"id": 45, "sec": "الشعار والرموز الهاشمية", "stem": "هو مصنوع من المهمل الاحمر القرمزي والحرير الابيض هو", "opts": ["التاج", "الوشاح", "العقاب"], "ans": 1, "tf": false, "inf": false, "page": 1}, {"id": 46, "sec": "الشعار والرموز الهاشمية", "stem": "يمثل القوه والبأس والعلو هو", "opts": ["التاج", "الوشاح", "العقاب"], "ans": 2, "tf": false, "inf": false, "page": 1}, {"id": 47, "sec": "الشعار والرموز الهاشمية", "stem": "الشعار الذي يرمز الى راية الرسول الأعظم محمد صلى الله علية وسلم هو", "opts": ["التاج", "الوشاح", "العقاب"], "ans": 2, "tf": false, "inf": false, "page": 1}, {"id": 48, "sec": "الشعار والرموز الهاشمية", "stem": "يرمز الى انتشار الاسلام وحضارته في العالم هو", "opts": ["التاج", "كره ارضية", "العقاب"], "ans": 1, "tf": false, "inf": false, "page": 1}, {"id": 49, "sec": "الشعار والرموز الهاشمية", "stem": "اللون الاسود يدل على", "opts": ["العباسية", "الفاطمية", "الاموية", "الثورة العربية"], "ans": 0, "tf": false, "inf": false, "page": 1}, {"id": 50, "sec": "الشعار والرموز الهاشمية", "stem": "اللون الابيض يدل على", "opts": ["العباسية", "الفاطمية", "الاموية", "الثوره العربية"], "ans": 1, "tf": false, "inf": false, "page": 1}, {"id": 51, "sec": "الشعار والرموز الهاشمية", "stem": "اللون الاخضر يدل على", "opts": ["العباسية", "الفاطمية", "الاموية", "الثوره العربية"], "ans": 2, "tf": false, "inf": false, "page": 1}, {"id": 52, "sec": "الشعار والرموز الهاشمية", "stem": "اللون الاحمر يدل على", "opts": ["العباسية", "الفاطمية", "الاموية", "الثوره العربية"], "ans": 3, "tf": false, "inf": false, "page": 1}, {"id": 53, "sec": "الشعار والرموز الهاشمية", "stem": "يمثل المثلث الاحمر", "opts": ["العباسية", "الفاطمية", "الاموية", "السلاله الهاشمية"], "ans": 3, "tf": false, "inf": true, "page": 1}, {"id": 54, "sec": "الشعار والرموز الهاشمية", "stem": "الكوكب السباعي يدل", "opts": ["العباسية", "السلاله الهاشمية", "فاتحة القران", "الثوره العربية"], "ans": 2, "tf": false, "inf": false, "page": 1}, {"id": 55, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "الدولة التي تعتبر لنفسها السياده المطلقة هي الدولة", "opts": ["الدولة الحديثة", "الدولة القديمة", "الدولة الهاشمية"], "ans": 0, "tf": false, "inf": false, "page": 1}, {"id": 56, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "الحقوق التي تتعلق بالمساواهمع الاخرين هي", "opts": ["حقوق مدنية", "حقوق سياسية", "حقوق جماعية"], "ans": 0, "tf": false, "inf": false, "page": 1}, {"id": 57, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "الحقوق التي تتعلق بالمشاركة في اتخاذ القرارهي", "opts": ["حقوق مدنية", "حقوق سياسية", "حقوق جماعية"], "ans": 1, "tf": false, "inf": false, "page": 1}, {"id": 58, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "الحقوق التى ترتبط بالشؤون الاقتصادية والاجتماعية والثقافية هي", "opts": ["حقوق مدنية", "حقوق سياسية", "حقوق جماعية"], "ans": 2, "tf": false, "inf": false, "page": 1}, {"id": 59, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "هي الالية للحد من الصرعات الاثنية والعرقية والاجتماعية والجنسوية هي", "opts": ["السيادة", "المواطنة", "الحقوق الاجتماعية"], "ans": 1, "tf": false, "inf": false, "page": 2}, {"id": 60, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "المبدأ التى ترتكز عليها المواطنه هي", "opts": ["عدم التمييز والمساواة", "المشاركه في اتخاذ القرار", "المساواهمع الاخرين"], "ans": 0, "tf": false, "inf": false, "page": 2}, {"id": 61, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "المساواه التي اقرتها الدساتير والشرائع الداخلية والدولية هي المساواه", "opts": ["المساواه القانونية", "المساواه الاجتماعية", "المساواه السياسية"], "ans": 0, "tf": false, "inf": false, "page": 2}, {"id": 62, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "هي الحقوق والواجبات والمساواة والعداله والحرية والمشاركة السياسية والتسامح هي :", "opts": ["المواطنة", "المساواة", "الحرية"], "ans": 0, "tf": false, "inf": false, "page": 2}, {"id": 63, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "تماثل امام القانون وتكافؤ الفرص وتوزان بين الذين تفاوتت حضوضهم", "opts": ["المواطنة", "المساواة", "الحرية"], "ans": 1, "tf": false, "inf": false, "page": 2}, {"id": 64, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "اتعدام القيود يطلق على المصطلح ( هارولد جوزيف)", "opts": ["المساواة", "التسامح", "الحرية"], "ans": 2, "tf": false, "inf": false, "page": 2}, {"id": 65, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "هي مجموعه السمات والخصائص الثقافية التي تميز ابناء وطن معين", "opts": ["الهوية الوطنية", "الديمقراطية", "المواطنة"], "ans": 0, "tf": false, "inf": false, "page": 2}, {"id": 66, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "ترتبط بمكونات الوطن الفكرية من معتقدات ولغة وقيم وعادات وتقاليد", "opts": ["الهوية الوطنية", "الديمقراطية", "المواطنة"], "ans": 0, "tf": false, "inf": false, "page": 2}, {"id": 67, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "الديمقراطية تعني", "opts": ["اتخاذ القرار السياسي", "حكم الشعب", "المساواه"], "ans": 1, "tf": false, "inf": false, "page": 2}, {"id": 68, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "حكم الشعب يطلق على", "opts": ["المواطنة", "الديمقراطية", "المساواه"], "ans": 1, "tf": false, "inf": false, "page": 2}, {"id": 69, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "منذ بداية عهد الديمقراطية حدث", "opts": ["فصل السلطات", "تخليص المجتمع السياسي من حكم الكنيسة"], "ans": 1, "tf": false, "inf": true, "page": 2}, {"id": 70, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "يرتبط مفهوم المشاركة السياسية بالحياه الديمقراطية للدولة", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 2}, {"id": 71, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "النطم الديمقراطية البرلمانية تعتبر عاملا مهما في تحقيق الديمقراطية للدولة", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 2}, {"id": 72, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "الحقوق الاساسية للموطنين هي حق 1- التصويت 2- تولي الوظائف العامة والمشاركة في عملية صنع القرار", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 2}, {"id": 73, "sec": "الدولة والحقوق والمواطنة والديمقراطية", "stem": "هي تمثل طموحا من اجل الحصول على الحرية هي", "opts": ["المشاركة السياسية", "الديمقراطية", "الهوية الوطنية"], "ans": 0, "tf": false, "inf": false, "page": 2}, {"id": 74, "sec": "السلطة والسيادة", "stem": "عبارة عن مساهمة الموطنين المباشرة والغير مباشرة في عملية اتخاذ القرارات في النظام السياسي", "opts": ["المشاركه السياسية", "الديمقراطية", "الهوية الوطنية"], "ans": 0, "tf": false, "inf": false, "page": 3}, {"id": 75, "sec": "السلطة والسيادة", "stem": "المكان التي يرتبط بها الشعب ارتباطاً تاريخياً هو", "opts": ["المواطنة", "الوطن", "الهوية الوطنية"], "ans": 1, "tf": false, "inf": false, "page": 3}, {"id": 76, "sec": "السلطة والسيادة", "stem": "تشير الى النفوذ المعترف به كلياً لفرد من وجهات نظر هي", "opts": ["الديمقراطية", "السلطة", "المشاركة السياسية"], "ans": 1, "tf": false, "inf": false, "page": 3}, {"id": 77, "sec": "السلطة والسيادة", "stem": "قد تكون السلطة سياسية واخلاقية وعلمية  ", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 3}, {"id": 78, "sec": "السلطة والسيادة", "stem": "السلطه التي يطلق عليها باسم السلطان الشخصي هي السلطة", "opts": ["النفسية", "الشرعية", "القضائية", "الدينية"], "ans": 0, "tf": false, "inf": false, "page": 3}, {"id": 79, "sec": "السلطة والسيادة", "stem": "السلطة التي تمثل قدرة الانسان على فرض ارادته على الاخرين هي", "opts": ["النفسية", "الشرعية", "الدينية"], "ans": 0, "tf": false, "inf": false, "page": 3}, {"id": 80, "sec": "السلطة والسيادة", "stem": "السلطه المعترف بها في القانون كسلطه الحاكم والوالد والقائد", "opts": ["النفسية", "الشرعية", "الدينية"], "ans": 1, "tf": false, "inf": false, "page": 3}, {"id": 81, "sec": "السلطة والسيادة", "stem": "سلطة الحاكم والوالد والقائد وهي سلطة", "opts": ["النفسية", "الشرعية", "الدينية"], "ans": 1, "tf": false, "inf": false, "page": 3}, {"id": 82, "sec": "السلطة والسيادة", "stem": "السلطة التي تمارس السلطات السياسية والتربوية والقضائية هي السلطة (جان وليام لابيار)", "opts": ["النفسية", "الشرعية", "اجهزة الاجتماعية"], "ans": 2, "tf": false, "inf": false, "page": 3}, {"id": 83, "sec": "السلطة والسيادة", "stem": "السلطة التي ترتبط بالمحاكم والسجون وغيرها من المؤسسات العقابية هي", "opts": ["النفسية", "العامة", "الدينية"], "ans": 1, "tf": false, "inf": false, "page": 3}, {"id": 84, "sec": "السلطة والسيادة", "stem": "هي مصطلح قانوني وسياسي جماعة من الناس يرتبط افرادها بروابط معينة", "opts": ["الامة", "الديمقراطية", "السيادة"], "ans": 0, "tf": false, "inf": false, "page": 3}, {"id": 85, "sec": "السلطة والسيادة", "stem": "نشأت نتيجة لضرورة املتها حاجات الفرد والقبيلة الى الحماية وتزايد الحاجات الدولية الى وجود علاقات متبادلة هي", "opts": ["المواطنة", "السيادة الوطنية", "الهوية الوطنية"], "ans": 1, "tf": false, "inf": false, "page": 3}, {"id": 86, "sec": "السلطة والسيادة", "stem": "العلاقات المتبادلة بين الدول تطلبت احترام سيادة الدول الاخرى", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 3}, {"id": 87, "sec": "السلطة والسيادة", "stem": "هي ركن من اركان الدولة بالإضافة الى الشعب والاقليم", "opts": ["السيادة", "الهوية", "الامة"], "ans": 0, "tf": false, "inf": false, "page": 3}, {"id": 88, "sec": "السلطة والسيادة", "stem": "عرف ارسطو السياده على انها سلطة عليا داخل حدود الدولة", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 4}, {"id": 89, "sec": "السلطة والسيادة", "stem": "اعتبر افلاطون بان صاحب السيادة هو من يملك السلطة العليا على الاقليم وسكانه", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 4}, {"id": 90, "sec": "السلطة والسيادة", "stem": "اختلط مفهوم السيادة بغيره من المفاهيم المشابهة مثل الحرية والاستقلال", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 4}, {"id": 91, "sec": "السلطة والسيادة", "stem": "من مضاهرها انها لاتقبل التجزئة هي", "opts": ["السيادة", "الهوية", "الديمقراطية"], "ans": 0, "tf": false, "inf": false, "page": 4}, {"id": 92, "sec": "السلطة والسيادة", "stem": "من مظاهر السيادة لاتقبل التجزئة ولاتقبل التصرف بها", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 4}, {"id": 93, "sec": "السلطة والسيادة", "stem": "التنازل عن السيادة يعني فقدان الدولة", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 4}, {"id": 94, "sec": "السلطة والسيادة", "stem": "اهم الحقوق الاساسية للدولة", "opts": ["تمتع السيادة بالاستقلال", "المشاركة اتخاذ القرار"], "ans": 0, "tf": false, "inf": false, "page": 4}, {"id": 95, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تلعب دوراً مهما في التوعية والتنوير والتربية والتعليم", "opts": ["الاسرة", "المؤسسات التعليمية", "المؤسسة الاعلامية"], "ans": 0, "tf": false, "inf": false, "page": 4}, {"id": 96, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تلعب دورا مهماً في اعداد النشء الجيد والتأثير على الاتجاهات الافراد وآرائهم", "opts": ["الاسرة", "المؤسسة التعليمية", "المؤسسة الاعلامية"], "ans": 2, "tf": false, "inf": false, "page": 5}, {"id": 97, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "قضايا التربية الوطنية تعد من دور", "opts": ["الاسرة", "المؤسسة التعليمية", "المؤسسة الاعلامية"], "ans": 2, "tf": false, "inf": false, "page": 5}, {"id": 98, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تعكس وسائل الاعلام ثقافة المجتمع", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 99, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تساهم المؤسسة الاعلامية في صياغة الشخصية الثقافية والهوية الحضارية", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 100, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "والاعلام يشكل مصدر غير تقليدي للقيم وانماط التحول", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 101, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تحقيق التربية الوطنية تعد دور", "opts": ["الاسرة", "الاعلام", "المجتمع المدني"], "ans": 1, "tf": false, "inf": false, "page": 5}, {"id": 102, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "انطلقت السياسة الاعلامية الاردنية من مبادئ الدستور الاردني وتوجهات الميثاق الوطني", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 103, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تقوم فكرة المجتمع المدني على انتظام الافراد والمؤسسات او هيئات فاعلة-", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 104, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "مستقلة عن الاشراف المباشر للحكومة ( المجتمع المدني )", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 105, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "يتوزع المجتمع المدني على اكثر من 12 فئة من التنظيمات ( التنظيمات ص 25)", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 5}, {"id": 106, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "مؤسسات المجتمع المدني بدور الشريك للحكومه في عملية التنمية الاقتصادية", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": true, "page": 5}, {"id": 107, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "اعتمدت منهجية الملك عبدالله على التنمية والاصلاح الاقتصادي والاداري والقائم على شراكة العادلة بين القطاع الخاص والعام وتم اعتماد قوانين مرنه هدفها جذب الاستثمارات العربية والاجنبية وتقليص العجز الدائم في الميزانية وتحقيق معدل النمو الاقتصادي", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 6}, {"id": 108, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "وجه الملك عبدالله الحكومة في مسيرة الاصلاع بوضع قانون اتخاب جديد يلغي مبدأ الصوت الواحد وسن قانون الاحزاب السياسية", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 6}, {"id": 109, "sec": "التنشئة الوطنية والمجتمع المدني والإصلاح", "stem": "تعتمد السياسة على تحديث الاردن في كل المجالات التطوير والعلم والتعليم ومواكبة التطور التكنولوجي هي السياسة", "opts": ["التنمية الاجتماعية والادارية والتعليمية", "التنمية السياسية", "المؤسسة التعليمية"], "ans": 0, "tf": false, "inf": false, "page": 6}, {"id": 110, "sec": "الدستور والقانون ومصادره", "stem": "هي مجموعه من المبادئ الاساسية لسطات الدولة المبينة لحقوق كل من الحكام والمحكومين", "opts": ["الديمقراطية", "الدستور", "السادة الوطنية"], "ans": 1, "tf": false, "inf": false, "page": 6}, {"id": 111, "sec": "الدستور والقانون ومصادره", "stem": "تشمل الملامح الاساسية للدولة هي", "opts": ["الدستور", "الوثيقة الدستورية", "الديمقراطية"], "ans": 1, "tf": false, "inf": false, "page": 6}, {"id": 112, "sec": "الدستور والقانون ومصادره", "stem": "يتاح للشعب فرصة الانتخاب ممثلية تعد من", "opts": ["الجمعية التأسيسية المنتخبة", "الاستفتاء الدستوري"], "ans": 0, "tf": false, "inf": false, "page": 6}, {"id": 113, "sec": "الدستور والقانون ومصادره", "stem": "اول من اخذ اسلوب فرصة انتخاب ممثلية هي", "opts": ["بريطانيا", "الولايات المتحدة الامريكية", "فرنسا"], "ans": 1, "tf": false, "inf": false, "page": 6}, {"id": 114, "sec": "الدستور والقانون ومصادره", "stem": "حيث يتم وضعه بواسطه جمعية نيابية منتخبة من الشعب او لجنة حكومية بواسطة الحاكم", "opts": ["الجمعية التأسيسية المنتخبة", "الاستفتاء الدستوري"], "ans": 1, "tf": false, "inf": false, "page": 6}, {"id": 115, "sec": "الدستور والقانون ومصادره", "stem": "المنحة لاتعد ديمقراطية في وضع الدساتير (من الحاكم لشعبة )", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 6}, {"id": 116, "sec": "الدستور والقانون ومصادره", "stem": "العقد لايعد ديمقراطية في وضع الدساتير ( هي طريقة شبه الديمقراطية )", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 7}, {"id": 117, "sec": "الدستور والقانون ومصادره", "stem": "يكون الدستور عبارة عن تعاقد بين الحاكم من جانب وممثلين للشعب", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 7}, {"id": 118, "sec": "الدستور والقانون ومصادره", "stem": "تقسم الدساتير من حيث تدوينها اوعدم تدوينها الى دساتير مدونة وغير مدونه من حيث طرق تعديلها الى", "opts": ["دساتير مرنة وجامدة", "دساتير مرنة ومدونة", "دساتير غير مدونة ومرنة"], "ans": 0, "tf": false, "inf": false, "page": 7}, {"id": 119, "sec": "الدستور والقانون ومصادره", "stem": "الدستور الذي يكون غالبية قواعده مكتوبه في وثيقة او وثائق رسمية صدرت من المشرع الدستوري هو من الدساتير", "opts": ["الدساتير المرنه", "الدساتير الجامده", "الدساتير المدونة", "الدساتير الغير مدونة"], "ans": 2, "tf": false, "inf": false, "page": 7}, {"id": 120, "sec": "الدستور والقانون ومصادره", "stem": "الدستور الذي يكون قواعده عرفية استمر العمل بها لسنوات طويلة هي من الدساتير", "opts": ["الدساتير المرنه", "الدساتير الجامده", "الدساتير الغير المدونة", "الدستاير المدونة"], "ans": 2, "tf": false, "inf": false, "page": 7}, {"id": 121, "sec": "الدستور والقانون ومصادره", "stem": "الدساتير العرفية تطلق على الدساتير", "opts": ["الدساتير المرنة", "الدساتير الغير مدونة", "الدساتير المدونة", "الدساتير الجامدة"], "ans": 1, "tf": false, "inf": false, "page": 7}, {"id": 122, "sec": "الدستور والقانون ومصادره", "stem": "الدستور الانجليزي المثال الابرز على الدساتير", "opts": ["الدساتير المرنة والجامدة", "الدساتير الغير مدونة والمرنة", "الدساتير المدونة والمرنة", "الدساتير الجامدة وغير المدونة"], "ans": 1, "tf": false, "inf": false, "page": 7}, {"id": 123, "sec": "الدستور والقانون ومصادره", "stem": "من الدساتير الذي ياخذ غالبية من العرف وبعضها من القضاة هو من الدساتير", "opts": ["الدساتير المرنة", "الدساتير الغير مدونة", "الدساتير المدونة", "الدساتير الجامدة"], "ans": 1, "tf": false, "inf": false, "page": 7}, {"id": 124, "sec": "الدستور والقانون ومصادره", "stem": "من الاحكام الدستورية الذي سمح للنساء بأن يكون عضوات مجلس اللوردات سنة 1958 وتكون هذه الاحكام الدستورية", "opts": ["الدساتير المرنة", "الدساتير الغير مدونة", "الدساتير المكتوبة", "الدساتير الجامدة"], "ans": 2, "tf": false, "inf": false, "page": 8}, {"id": 125, "sec": "الدستور والقانون ومصادره", "stem": "من الدساتير التي يمكن تعديلها بنفس الاجراءات بواسطة السلطة التشريعة", "opts": ["الدساتير المرنة", "الدستاير الغير المدونة", "الدساتير المدونة", "الدساتير الجامدة"], "ans": 0, "tf": false, "inf": false, "page": 8}, {"id": 126, "sec": "الدستور والقانون ومصادره", "stem": "الدساتير المرنة التي تكون بواسطة السلطة", "opts": ["التشريعية", "القضائية", "التنفيذية"], "ans": 0, "tf": false, "inf": false, "page": 8}, {"id": 127, "sec": "الدستور والقانون ومصادره", "stem": "الدساتير التي يكمن تعديلها الاجراءات اشد من تعديل القوانين العادية", "opts": ["الدساتير المرنة", "الدساتير الغير مدونة", "الدساتير الجامدة", "الدساتير المدونة"], "ans": 2, "tf": false, "inf": false, "page": 8}, {"id": 128, "sec": "الدستور والقانون ومصادره", "stem": "دستور استراليا الفيدرلي هو مثالاً على الدساتير", "opts": ["الدساتير المرنة", "الدساتير الغير مدونة", "الدساتير الجامدة", "الدساتير المدونة"], "ans": 2, "tf": false, "inf": false, "page": 8}, {"id": 129, "sec": "الدستور والقانون ومصادره", "stem": "القانون الاعلى في الدوله لايعلوه قانون اخر هو مفهوم", "opts": ["سمو الدستور", "السمو الموضوعي", "السمو الشكلي"], "ans": 0, "tf": false, "inf": false, "page": 8}, {"id": 130, "sec": "الدستور والقانون ومصادره", "stem": "دستور ايطاليا ودستور الصومال مثالاً على", "opts": ["سمو الدستور", "السمو الشكلى", "الدستور مرن", "دستور جامد"], "ans": 0, "tf": false, "inf": false, "page": 8}, {"id": 131, "sec": "الدستور والقانون ومصادره", "stem": "ان الدستور هو القانون الاساسي للدولة يترتب على مفهوم", "opts": ["السمو الشكلي", "السمو الموضوعي", "النظام السياسي"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 132, "sec": "الدستور والقانون ومصادره", "stem": "هو الذي يبين اهداف الدولة ويضعها في الاطار السياسي", "opts": ["السمو الشكلي", "السمو الموضوعي", "النظام السياسي"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 133, "sec": "الدستور والقانون ومصادره", "stem": "الجهة الوحيدة التي تنشئ السلطات الحاكمة وتحدد اختصاصاتها هي", "opts": ["الدستور", "السمو الموضوعي", "السمو الشكلي"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 134, "sec": "الدستور والقانون ومصادره", "stem": "موجود في الدساتير الجامدة فقط هو", "opts": ["السمو الشكلي", "السمو الموضوعي", "الدستور"], "ans": 0, "tf": false, "inf": false, "page": 9}, {"id": 135, "sec": "الدستور والقانون ومصادره", "stem": "هو الدي نتبع في وضعه وتعديله اجراءات معينة", "opts": ["السمو الشكلي", "السمو الموضوعي", "الدستور"], "ans": 0, "tf": false, "inf": false, "page": 9}, {"id": 136, "sec": "الدستور والقانون ومصادره", "stem": "احترام الدستور وقواعده وينظم الرقابة على دستورية القوانين", "opts": ["السمو الشكلي", "السمو الموضوعي", "الدستور"], "ans": 0, "tf": false, "inf": false, "page": 9}, {"id": 137, "sec": "الدستور والقانون ومصادره", "stem": "هو مجموعة من القواعد التي تحكم وتنظم سلوك الافراد في الجماعة وتوفق مصالحهم", "opts": ["الدستور", "القانون", "النظام", "السيادة"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 138, "sec": "الدستور والقانون ومصادره", "stem": "هي قاعدة تقويمية تطلق على القاعدة", "opts": ["سلوكية", "اجتماعية", "ملزمة", "عامة"], "ans": 0, "tf": false, "inf": false, "page": 9}, {"id": 139, "sec": "الدستور والقانون ومصادره", "stem": "تتضمن القاعد امراً ونهياً هي قاعدة", "opts": ["سلوكية", "اجتماعية", "ملزمة", "عامة"], "ans": 0, "tf": false, "inf": false, "page": 9}, {"id": 140, "sec": "الدستور والقانون ومصادره", "stem": "تتضمن القاعدة تعريفا او تنظيماً تطلق على القاعدة", "opts": ["سلوكية", "اجتماعية", "ملزمة", "عامة"], "ans": 0, "tf": false, "inf": false, "page": 9}, {"id": 141, "sec": "الدستور والقانون ومصادره", "stem": "القاعدة غير مخصصة فيما تضعه من احكام على شخص او اشخاص", "opts": ["سلوكية", "عامة", "ملزمة", "اجتماعية"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 142, "sec": "الدستور والقانون ومصادره", "stem": "يقصد بالتجريد او خطاب القاعدة تطلق على القاعدة", "opts": ["سلوكية", "عامة", "اجتماعية"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 143, "sec": "الدستور والقانون ومصادره", "stem": "الحاجة الى قواعد القانون لاتبدو الا مع قيام الجماعة", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 9}, {"id": 144, "sec": "الدستور والقانون ومصادره", "stem": "اذا انحرفت هذه الاسس ولم تراع المثل العليا هي قاعده", "opts": ["سلوكية", "اجتماعية", "عامة"], "ans": 1, "tf": false, "inf": false, "page": 9}, {"id": 145, "sec": "الدستور والقانون ومصادره", "stem": "هي المصادر التي تستمد منها القاعدة القانونية هي", "opts": ["رسمية", "شكلية", "مادية", "التشريع"], "ans": 2, "tf": false, "inf": false, "page": 9}, {"id": 146, "sec": "الدستور والقانون ومصادره", "stem": "العوامل التي اسهمت في تكوين القاعدة كعوامل اجتماعية اواقتصادية تعد من المصادر", "opts": ["رسمية", "شكلية", "مادية", "التشريع"], "ans": 2, "tf": false, "inf": false, "page": 9}, {"id": 147, "sec": "الدستور والقانون ومصادره", "stem": "الوسائل التي تخرج بها القاعدة الى حيز التنفيذ هي مصادر", "opts": ["رسمية", "مادية", "موضوعي", "التشريع"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 148, "sec": "الدستور والقانون ومصادره", "stem": "سن القواعد القانونية في صورة مكتوبة بمعرفة سطلة عامة في الدولة هو", "opts": ["التشريع", "العرف", "القضاه", "العدالة الطبيعية"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 149, "sec": "الدستور والقانون ومصادره", "stem": "القاعدة التى تخرج من هذا المصدر هو مصطلح", "opts": ["التشريع", "العرف", "القضاه", "العدالة الطبيعية"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 150, "sec": "الدستور والقانون ومصادره", "stem": "اهم المصادر الرسمية للقانون في الدول الحديثة هي", "opts": ["التشريع", "العرف", "الدين", "القضاه"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 151, "sec": "الدستور والقانون ومصادره", "stem": "اغلب القواعد القانونية مصدرها التشريع", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 10}, {"id": 152, "sec": "الدستور والقانون ومصادره", "stem": "يعتبر مصدراً رسميا اصلياً للقواعد القانونية", "opts": ["التشريع", "الدين", "العرف"], "ans": 1, "tf": false, "inf": false, "page": 10}, {"id": 153, "sec": "الدستور والقانون ومصادره", "stem": "اعتياد الناس على سلوك معين هو", "opts": ["العرف", "التشريع", "القضاه"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 154, "sec": "الدستور والقانون ومصادره", "stem": "اقدم المصادر الرسمية للقانون هو", "opts": ["العرف", "التشريع", "القضاه"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 155, "sec": "الدستور والقانون ومصادره", "stem": "كانت السوابق القضائية مصدراً رسمياً للقانون", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 10}, {"id": 156, "sec": "الثقافة السياسية والنظام السياسي", "stem": "هي مجموعة من الاتجاهات والمعتقدات والمشاعر التى تعطي نظاماً للعملية السياسية", "opts": ["الثقافة السياسية", "التنشئة الاسياسة", "النظام السياسي"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 157, "sec": "الثقافة السياسية والنظام السياسي", "stem": "تتميز الثقافة السياسية بانها متغيره", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 10}, {"id": 158, "sec": "الثقافة السياسية والنظام السياسي", "stem": "لاتعرف الثبات المطلق هي", "opts": ["الثقافة السياسية", "التنشئة السياسية", "النظام السياسي"], "ans": 0, "tf": false, "inf": false, "page": 10}, {"id": 159, "sec": "الثقافة السياسية والنظام السياسي", "stem": "طريقة يتعلم بها الاطفال من قيم واتجاهات هي", "opts": ["الثقافة السياسية", "التنشئة السياسية", "النظام السياسي"], "ans": 1, "tf": false, "inf": false, "page": 11}, {"id": 160, "sec": "الثقافة السياسية والنظام السياسي", "stem": "يتحدد السلوك السياسي في مرحلة", "opts": ["النضج", "المراهقة", "الطفولة"], "ans": 0, "tf": false, "inf": false, "page": 11}, {"id": 161, "sec": "الثقافة السياسية والنظام السياسي", "stem": "هي حصيلة تفاعل شتى العناصر المكونة للدولة", "opts": ["النظام السياسي", "ييييييي"], "ans": 0, "tf": false, "inf": false, "page": 11}, {"id": 162, "sec": "الثقافة السياسية والنظام السياسي", "stem": "يعتبر من اهم المتطلبات تحقيق الامن والاستقرار في المجتمع هو", "opts": ["النظام السياسي", "ااااااااااااااااا"], "ans": 0, "tf": false, "inf": false, "page": 11}, {"id": 163, "sec": "الثقافة السياسية والنظام السياسي", "stem": "يعتبر من اقدم انواع الانظمة في التاريخ عو", "opts": ["النظام السياسي", "النظام الملكي"], "ans": 1, "tf": false, "inf": false, "page": 11}, {"id": 164, "sec": "الثقافة السياسية والنظام السياسي", "stem": "يمثل المثلث الاحمر الى", "opts": ["الثورة العربية", "السلالة الهاشمية", "النظام الملكي"], "ans": 1, "tf": false, "inf": false, "page": 11}, {"id": 165, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "رئيس السلطة التنفيذية هو", "opts": ["الملك", "رئيس الوزراء", "مجلس النواب", "مجلس الاعيان"], "ans": 0, "tf": false, "inf": false, "page": 12}, {"id": 166, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "هي الهيئة التنفيذية والادارية العليا في الدولة هي", "opts": ["السلطة القضائية", "الحكومة", "السلطة التنفيذية", "السلطة التشريعية"], "ans": 1, "tf": false, "inf": false, "page": 12}, {"id": 167, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "من اهم العناصر البرلماني هي", "opts": ["السلطة التنفيذية", "السلطة القضائية", "المسؤولية الوزارية", "السلطة التشريعية"], "ans": 2, "tf": false, "inf": false, "page": 12}, {"id": 168, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "جزاؤها الاستقالة هي", "opts": ["المسؤولية الوزارية", "المسؤولية السياسية", "المسؤولية المدنية", "السلطة التشريعية"], "ans": 1, "tf": false, "inf": false, "page": 12}, {"id": 169, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "محاكمة الوزراء عن الجرائم التي يقترفونها", "opts": ["المسؤولية الوزارية", "المسؤولية السياسية", "المسؤولية المدنية", "المسؤولية الجزائية"], "ans": 3, "tf": false, "inf": false, "page": 12}, {"id": 170, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "التعهد بدفع تعويضات الناتجة عن تصرفات الوزراء", "opts": ["المسؤولية الوزارية", "المسؤولية السياسية", "المسؤولية المدنية", "السلطة التشريعية"], "ans": 2, "tf": false, "inf": false, "page": 12}, {"id": 171, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "احد العناصر الرئيسة في عملية التشريع هي", "opts": ["مرحلة اصدار القوانين", "مرحلة تصديق القوانين", "اقرار القوانين", "الاقتراح"], "ans": 1, "tf": false, "inf": false, "page": 14}, {"id": 172, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "عملية اصدار قانون جديد تم اقراره من مجلس الامة بعد المرور بالمراحل الرئيسية", "opts": ["مرحلة اصدار القوانين", "مرحلة تصديق القوانين", "اقرار القوانين", "الاقتراح"], "ans": 0, "tf": false, "inf": false, "page": 14}, {"id": 173, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "هو الاعمال الرقابية التي يقوم بها مجلس الامة على السلطة التنفيذية هو", "opts": ["الاختصاص السياسي", "النظام السياسي", "الاستقلال", "المساواة"], "ans": 0, "tf": false, "inf": false, "page": 14}, {"id": 174, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "مقدار من المال تحصل علية الدولة من خلال سلطتها ( هي وظيفة مجلس الامه )والهدف من ذلك تحقيق الاهداف التي تنبع الفلسفة السياسية للدولة", "opts": ["الضريبة", "الرسوم", "تكاليف"], "ans": 0, "tf": false, "inf": false, "page": 15}, {"id": 175, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "مبلغ من المال تحصل علية الدولة مقابل خدمات تقدم للأفراد ( وظيفية مجلس الامه )", "opts": ["الضريبة", "الرسوم", "التكاليف"], "ans": 1, "tf": false, "inf": false, "page": 15}, {"id": 176, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "الوثيقة المالية للدولة التي يتحدد بها الايرادات ونفقات الدولة وتعرض على مجلس الامه", "opts": ["الموازنة العامة", "الموازنة الخاصة", "الموازنة الشركات"], "ans": 0, "tf": false, "inf": false, "page": 15}, {"id": 177, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "تعتبر السلطة القضائية في النظام السياسي منفصلة عن السلطات الاخرى وتتولها المحاكم وتصدر جميع الاحكام باسم الملك", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 15}, {"id": 178, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "ان من يلجأ للقضاء لا يدفع اجور التقاضي . وان عملية دفع الرسوم لاتنافي مع مجانية القضاء", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 15}, {"id": 179, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "تشكل احدى الضمانات الاساسية للتقاضي وتعد شكل من الرقابة الشعبية على الاعمال السلطة القضائية وتخلق نوع من الطمأنينة لدى المتقاضين", "opts": ["الاستقلال", "المساواة", "علانية الجلسات", "مجانية القضاء"], "ans": 2, "tf": false, "inf": false, "page": 15}, {"id": 180, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "من المبادئ الهامة والاساسية لضمان تحقيق العدالة ونزاهة القضاء هي", "opts": ["الاستقلال", "المساواة", "التقاضي على درجتين", "مجانية القضاء"], "ans": 2, "tf": false, "inf": false, "page": 15}, {"id": 181, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "فهم مستقلون لا سلطات عليهم في قضائهم هم", "opts": ["القضاة", "مجلس النواب", "مجلس الاعيان", "مجلس الامة"], "ans": 0, "tf": false, "inf": false, "page": 16}, {"id": 182, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "يتم تعيين وعزل القضاة بقرار من المجلس القضائي مقترن بالإرادة الملكية", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 16}, {"id": 183, "sec": "السلطات الثلاث ومجلس الأمة", "stem": "تعتبر هيئة قضائية مستقلة قائمة بذاتها ( وتتألف من 9 اعضاء من بينهم الرئيس يعينهم الملك ومدة العضوية 6 سنوات غير قابلة للتجديد )( المحكمة الدستورية ) وتختص بالرقابة على دستورية القوانين والانظمة النافذة وحق تفسير النصوص بقرار صادر عن مجلس الوزراء او الامة وتصدر احكامها باسم الملك", "opts": ["المحكمة الدستورية", "مجلس النواب", "مجلس الاعيان", "مجلس الامة"], "ans": 0, "tf": false, "inf": false, "page": 16}, {"id": 184, "sec": "تطور الدستور والحياة النيابية", "stem": "الرحلة الرابعة من تطور الدستور عام 1921 هي", "opts": ["مراجعة دستورية", "مراجعة سياسية", "النظام السياسي", "صدور الدستور"], "ans": 0, "tf": false, "inf": false, "page": 17}, {"id": 185, "sec": "تطور الدستور والحياة النيابية", "stem": "صدور الدستور للدولة الاردنية في عام", "opts": ["1945", "1928", "1921", "1923"], "ans": 1, "tf": false, "inf": false, "page": 17}, {"id": 186, "sec": "تطور الدستور والحياة النيابية", "stem": "اعتبار القانون الاساسي لسنة 1928وتنازلت السلطة عن بعض امتيازتها", "opts": ["منحة لان السلطة مركزه بيد حكومة الانتداب وبيد الامير )", "عقد", "عفو", "2+3"], "ans": 0, "tf": false, "inf": false, "page": 18}, {"id": 187, "sec": "تطور الدستور والحياة النيابية", "stem": "الدستور الذي جاء بعد اعلان الاستقلال هو ( الحرية متاحة لوضع المبادئ والحالة السياسية في البلاد )", "opts": ["دستور 52", "دستور 46", "دستور 47", "دستور 53"], "ans": 1, "tf": false, "inf": false, "page": 18}, {"id": 188, "sec": "تطور الدستور والحياة النيابية", "stem": "دستور 52 هو دستور", "opts": ["سياسي", "برلماني", "ليبرالي", "اقتصادي"], "ans": 2, "tf": false, "inf": false, "page": 19}, {"id": 189, "sec": "تطور الدستور والحياة النيابية", "stem": "الدستور الذي صدر بطريقة التعاقد هو", "opts": ["دستور 52", "دستور 46", "دستور 47", "دستور 53"], "ans": 0, "tf": false, "inf": false, "page": 19}, {"id": 190, "sec": "تطور الدستور والحياة النيابية", "stem": "الدستور الذي لم يرد نص ان الشعب الاردني من الامة العربية (1952)", "opts": ["دستور 52", "دستور 46", "دستور 47", "دستور 53"], "ans": 1, "tf": false, "inf": false, "page": 20}, {"id": 191, "sec": "تطور الدستور والحياة النيابية", "stem": "هي مصدر السلطات (1952)", "opts": ["سيادة الامة", "السيادة المطلقة", "المجلس التشريعي", "المجلس القضائي"], "ans": 0, "tf": false, "inf": false, "page": 20}, {"id": 192, "sec": "تطور الدستور والحياة النيابية", "stem": "مبدأ سيادة الشعب هو", "opts": ["مصدر السلطات", "سيادة الامة", "الحاضنة للنظم الديمقراطية", "مبدأ المساواة"], "ans": 2, "tf": false, "inf": false, "page": 20}, {"id": 193, "sec": "تطور الدستور والحياة النيابية", "stem": "المبدأ الذي ضهر ابان الثورة الفرنسية ضد مبدأ سيادة الملوك المطلقة المعتمدة على نظرية الحق الالهي في الحكم هو (1952)", "opts": ["مبدأ المساواة", "مبدأ سيادة الشعب", "مبدأ سيدة الامة", "مبدأ السيادة المطلقة"], "ans": 1, "tf": false, "inf": false, "page": 20}, {"id": 194, "sec": "تطور الدستور والحياة النيابية", "stem": "الملك رئيس للدولة وغير مسؤول والذي يتحمل المسؤولية هو مجلس الوزراء امام مجلس النواب (1952)", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 20}, {"id": 195, "sec": "تطور الدستور والحياة النيابية", "stem": "الدستور الذي نص على ان يكون عدد مجلس الاعيان نصف عدد مجلس النواب وجلس الاعيان يعينة الملك والنواب منتخب من الشعب هو", "opts": ["دستور 52", "دستور 46", "دستور 47", "دستور 53"], "ans": 0, "tf": false, "inf": false, "page": 20}, {"id": 196, "sec": "تطور الدستور والحياة النيابية", "stem": "أخذ الدستور الاردني الفصل ( بين السلطات ) بمبدأ الفصل المرن بين السلطات الثلاث والفصل ليس مطلقاً يوجد تعاون بين السلطة التنفيذية والتشريعية ويحق للسلطة التشريعية بأعمال الرقابة ومساءلة الوزارة والتنفيذية تشارك السلطة التشريعية بأقتراح القوانين (1952)", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 21}, {"id": 197, "sec": "تطور الدستور والحياة النيابية", "stem": "هو ركن من اركان التي يقوم عليها البناء الديمقراطي في الاردن", "opts": ["الحياه النيابية ( جزء من النظام السياسي )", "الاستقرار السياسي", "الفصل بين السلطات", "سيادة الامة"], "ans": 0, "tf": false, "inf": false, "page": 21}, {"id": 198, "sec": "تطور الدستور والحياة النيابية", "stem": "اذا تعطل هذا الركن تتعرض الديمقراطية للشلل", "opts": ["الحياه النيابية ( جزء من النظام السياسي )", "الاستقرار السياسي", "الفصل بين السلطات", "سيادة الامة"], "ans": 0, "tf": false, "inf": false, "page": 21}, {"id": 199, "sec": "تطور الدستور والحياة النيابية", "stem": "المجلس النيابي الرابع عشر كان في ( زيادة عدد 110 مقاعد و 6 كوتا )", "opts": ["2005", "2003", "2004", "2006"], "ans": 1, "tf": false, "inf": false, "page": 22}, {"id": 200, "sec": "تطور الدستور والحياة النيابية", "stem": "المجلس النيابي الخامس عشر بتاريخ 20/11/", "opts": ["2005", "2006", "2007", "2004"], "ans": 2, "tf": false, "inf": false, "page": 22}, {"id": 201, "sec": "تطور الدستور والحياة النيابية", "stem": "المجلس النيابي السادس عشر بتاريخ9/11 عام", "opts": ["2010", "2011", "2009", "2007"], "ans": 0, "tf": false, "inf": false, "page": 22}, {"id": 202, "sec": "تطور الدستور والحياة النيابية", "stem": "المجلس السابع عشر كان في سنة", "opts": ["2010", "2013", "2014", "2009"], "ans": 1, "tf": false, "inf": false, "page": 22}, {"id": 203, "sec": "تطور الدستور والحياة النيابية", "stem": "النظام الاردني مرن وليس جامد", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 23}, {"id": 204, "sec": "تطور الدستور والحياة النيابية", "stem": "يعتبر قانون الانتخاب لعام 2012 هو", "opts": ["محاولة الخروج من عنق الزجاجة", "تخصيص الصوت الواحد", "تخصيص مقاعد الدائرة"], "ans": 0, "tf": false, "inf": true, "page": 23}, {"id": 205, "sec": "تطور الدستور والحياة النيابية", "stem": "اجرت الانتخابات النيابية للمجلس الثامن عشر في 20/9/ عام", "opts": ["2015", "2016", "2017", "2018"], "ans": 1, "tf": false, "inf": false, "page": 23}, {"id": 206, "sec": "الأحزاب والمواثيق الوطنية", "stem": "كل تنظيم سياسي مؤلف عن جماعة من الاردنيين يقصد به", "opts": ["الحزب", "النظام السياسي", "الحزب الاشتراكي", "حزب الحرية"], "ans": 0, "tf": false, "inf": false, "page": 24}, {"id": 207, "sec": "الأحزاب والمواثيق الوطنية", "stem": "عدد الاحزاب السياسية الموجودة على الساحة الاردنية", "opts": ["40", "50", "30", "20"], "ans": 1, "tf": false, "inf": false, "page": 24}, {"id": 208, "sec": "الأحزاب والمواثيق الوطنية", "stem": "عقد اول مؤتمر وطني سنة ( حضر حوالي 150 مندوباً) انتخاب لجنة انتخابية مهمتها تحقيق مطالب الشعب بالطرق المشروعة", "opts": ["1928", "1929", "1930", "1940"], "ans": 0, "tf": false, "inf": false, "page": 25}, {"id": 209, "sec": "الأحزاب والمواثيق الوطنية", "stem": "هي المحور الاساسي للحكم والعمل السياسي", "opts": ["الاحزاب السياسية", "النظام السياسي", "القاعدة الاساسية", "حزب الحرية"], "ans": 0, "tf": false, "inf": false, "page": 26}, {"id": 210, "sec": "الأحزاب والمواثيق الوطنية", "stem": "القاعدة الاساسية في الاحزاب السياسية هي ( الانتخابات النيابية هي نقطة البداية )", "opts": ["مبدأ الفصل بين السلطات", "الشعب مصدر السلطات", "ان تكون الاردن دولة مستقلة", "تعاون السلطة التنفيذية والتشريعية"], "ans": 0, "tf": false, "inf": false, "page": 26}, {"id": 211, "sec": "الأحزاب والمواثيق الوطنية", "stem": "وجود اكثر من حزب سياسي على الساحة التي تسعى الى خلق الوعي السياسي لدى الافراد", "opts": ["الحزب السياسي", "التعددية الحزبية", "الحزبية", "النظام الحزبي"], "ans": 1, "tf": false, "inf": false, "page": 26}, {"id": 212, "sec": "الأحزاب والمواثيق الوطنية", "stem": "مجموعة طوائف او مجموعات صغيرة تنشر في البلاد وينسق عملها للوصول الى الحكم عن طريق الانتخاب", "opts": ["الحزب السياسي", "التعددية الحزبية", "الحزبية", "النظام الحزبي"], "ans": 0, "tf": false, "inf": false, "page": 26}, {"id": 213, "sec": "الأحزاب والمواثيق الوطنية", "stem": "الدستور الذي نص على الحريات اضافة للتغير الديمغرافي وتغير البيئة الثقافية والاقتصادية والاجتماعية وتغير الواقع السياسي على الساحة العربية هو", "opts": ["دستور 1952", "دستور 1929", "دستور 1953", "دستور 1960"], "ans": 0, "tf": false, "inf": false, "page": 27}, {"id": 214, "sec": "الأحزاب والمواثيق الوطنية", "stem": "الفترة الواقعة بين الفترة 1957 – 1989 اتسمت بالعمل السري لغالبية الاحزاب السياسية باستثناء", "opts": ["جماعة الاخوان المسلمين", "حركة القوميين العرب", "حزب التحرير", "التيار القومي"], "ans": 0, "tf": false, "inf": false, "page": 28}, {"id": 215, "sec": "السياسة الخارجية الأردنية", "stem": "تعتبر من اهم عمليات التي تميز صنع السياسة الخارجية على انها مجموعة من القرارات المتوالية بشأن المواقف المتتالية هي", "opts": ["النظام السياسي", "الاستقرار السياسي", "اتخاذ القرار", "الموافقة على القوانين"], "ans": 2, "tf": false, "inf": false, "page": 29}, {"id": 216, "sec": "السياسة الخارجية الأردنية", "stem": "احد ابعاد السياسة الخارجية هي", "opts": ["النظام السياسي", "الاستقرار السياسي", "اتخاذ القرار", "الموافقة على القوانين"], "ans": 2, "tf": false, "inf": false, "page": 29}, {"id": 217, "sec": "السياسة الخارجية الأردنية", "stem": "صانع القرار السياسي الاول( والقرارات المناسبة ) هو", "opts": ["مجلس الوزراء", "مجلس الاعيان", "الملك", "مجلس الامه"], "ans": 2, "tf": false, "inf": false, "page": 29}, {"id": 218, "sec": "السياسة الخارجية الأردنية", "stem": "يعتبر من اهم واقرب عناصر صنع القرار المساعدة لجلالة الملك", "opts": ["الديوان الملكي", "مجلس الوزراء", "وزراه الخارجية", "السلطة التشريعية"], "ans": 0, "tf": false, "inf": false, "page": 30}, {"id": 219, "sec": "السياسة الخارجية الأردنية", "stem": "ادارة تنفيذ الشؤون الخارجية للدولة مباشرة او من وزارة الخارجية هي وظيفة", "opts": ["الديوان الملكي", "مجلس الوزراء", "وزراه الخارجية", "السلطة التشريعية"], "ans": 1, "tf": false, "inf": false, "page": 30}, {"id": 220, "sec": "السياسة الخارجية الأردنية", "stem": "تعتبر النافذة التي يطل بها الاردن على العالم هي يعمل الموظفون على توطيد العلاقات مع الدول الاجنبية )", "opts": ["الديوان الملكي", "مجلس الوزراء", "وزراه الخارجية ( يتحمل المسؤولية كبيرة من خلال واجباته اليوميه)", "السلطة التشريعية"], "ans": 2, "tf": false, "inf": false, "page": 30}, {"id": 221, "sec": "السياسة الخارجية الأردنية", "stem": "المصادقة على المعاهدات التي تمس حقوق الاردنيين العامة", "opts": ["الديوان الملكي", "مجلس الوزراء", "وزراه الخارجية", "السلطة التشريعية"], "ans": 3, "tf": false, "inf": false, "page": 30}, {"id": 222, "sec": "السياسة الخارجية الأردنية", "stem": "قائل العبارة التالية ( ان الجيش اداة السياسة الخارجية ....) الجيش رمز السيادة تثبيت الحكم", "opts": ["محمد الهزايمة", "السيد لطفي", "محمد السيد"], "ans": 0, "tf": false, "inf": false, "page": 31}, {"id": 223, "sec": "الأوراق النقاشية للملك", "stem": "تشريع القوانين والرقابة على الحكومة ومسائلتها هي دور يتمثل به", "opts": ["مجلس الاعيان", "مجلس النواب", "السلطة التشريعية", "السلطة القضائية0"], "ans": 1, "tf": false, "inf": false, "page": 32}, {"id": 224, "sec": "الأوراق النقاشية للملك", "stem": "ان الحكومة تتعامل مع النواب وفقا للدستور دون الابتزاز من اي جهة اخرى", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 32}, {"id": 225, "sec": "الأوراق النقاشية للملك", "stem": "تضيع حقوق تضيع حقوق الوطن والمواطن في عملية تبادل الادوار التي تستفيد منها الحكومة والنواب", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 32}, {"id": 226, "sec": "الأوراق النقاشية للملك", "stem": "ولا بد ان يخلو عمل النواب من الممارسات الملتوية التي ترمي الى تحقيق مكاسب على اساس الواسطة والمحسوبية", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 32}, {"id": 227, "sec": "الأوراق النقاشية للملك", "stem": "اعداد البرامج الشاملة التي تهدف الى تحقيق الازدهار والامن للجميع هي مسؤولية", "opts": ["مجلس النواب", "مجلس الوزراء( الحكومة )", "الملكية", "المواطن"], "ans": 1, "tf": false, "inf": false, "page": 32}, {"id": 228, "sec": "الأوراق النقاشية للملك", "stem": "ان مسؤولية الحكومة اعداد البرامج الشاملة التي تهدف الى تحقيق الازدهار والامن للجميع ويترتب علىها التقدم لمجلس النواب ببرامج عمل لمدة اربع سنوات", "opts": ["True", "False"], "ans": 0, "tf": true, "inf": false, "page": 33}, {"id": 229, "sec": "الأوراق النقاشية للملك", "stem": "هي التي تحكم عادات وممارسات اطراف العملية السياسية( هي عادات وممارسات غير مدونة وقد لا تكون لها قوة القانون هي", "opts": ["الاعراف السياسية", "الملكية", "الانظمة السياسية"], "ans": 0, "tf": false, "inf": false, "page": 36}, {"id": 230, "sec": "الأوراق النقاشية للملك", "stem": "كتاب التكليف الذي يوجه الملك للحكومات الذي يوضح ابراز المسؤوليات والمهام المنتظرة من الحكومة ويقيم اداء الحكومة هو (الورقة الخامسة)", "opts": ["عرف سياسي", "دستور", "قوانين"], "ans": 0, "tf": false, "inf": false, "page": 36}, {"id": 231, "sec": "الأوراق النقاشية للملك", "stem": "تطوير الجهاز القضائي اساس لتعزيز سيادة القانون - لا يترسخ مبدأ سيادة القانون الا بوجود وهو اساس ثقة المواطن بالأنصاف والحصول على الحقوق", "opts": ["جهاز قضائي", "جهاز حكومي", "جهاز تشريعي", "جهاز نيابي"], "ans": 0, "tf": false, "inf": false, "page": 37}, {"id": 232, "sec": "الدولة المدنية والرعاية الهاشمية للمقدسات", "stem": "الذي رفض سياسة التهويد في فلسطين هو", "opts": ["الشريف الحسين بن علي", "الملك عبدالله الاول بن الحسين", "الملك الحسين بن طلال", "الملك عبدالله الثاني ابن الحسين ."], "ans": 0, "tf": false, "inf": false, "page": 38}, {"id": 233, "sec": "الدولة المدنية والرعاية الهاشمية للمقدسات", "stem": "سياسته رفض الاعتراف بوعد بلفور وتقسيم البلاد بين فرنسا وبريطانيا ورفض سياسة الانتداب الفرنسي والبريطاني هو", "opts": ["الشريف الحسين بن علي", "الملك عبدالله الاول بن الحسين", "الملك الحسين بن طلال", "الملك عبدالله الثاني ابن الحسين"], "ans": 1, "tf": false, "inf": true, "page": 38}, {"id": 234, "sec": "الدولة المدنية والرعاية الهاشمية للمقدسات", "stem": "الذي تبرع ب 24الف ليره ذهبية لأعمار المقدسات الاسلامية وكان صيته ان يدفن بعد وفاته بالحرم القدسي هو", "opts": ["الشريف الحسين بن علي", "الملك عبدالله الاول بن الحسين", "الملك الحسين بن طلال", "الملك عبدالله الثاني ابن الحسين"], "ans": 0, "tf": false, "inf": false, "page": 38}, {"id": 235, "sec": "الدولة المدنية والرعاية الهاشمية للمقدسات", "stem": "في عام 1949 اشرف بنفسه على اطفاء الحرائق التي التهمت اجزاء من كنيسة القيامة وقدم المساعد الكاملة للكنيسة هو", "opts": ["الشريف الحسين بن علي", "الملك عبدالله الاول بن الحسين", "الملك الحسين بن طلال", "الملك عبدالله الثاني ابن الحسين"], "ans": 1, "tf": false, "inf": false, "page": 39}, {"id": 236, "sec": "الدولة المدنية والرعاية الهاشمية للمقدسات", "stem": "وقد اصدر قانونا لأعمار المسجد الاقصى المبارك والصخرة المشرفة لسنة1954 وعرف اعمار بالأعمار الثاني والثالث هو", "opts": ["الشريف الحسين بن علي", "الملك عبدالله الاول بن الحسين", "الملك الحسين بن طلال", "الملك عبدالله الثاني ابن الحسين"], "ans": 2, "tf": false, "inf": false, "page": 39}, {"id": 237, "sec": "الدولة المدنية والرعاية الهاشمية للمقدسات", "stem": "الحريق الذي اصاب المسجد الاقصى كان بتاريخ", "opts": ["21/8/1969", "21/8/1970", "25/8/1969", "25/8/1970"], "ans": 0, "tf": false, "inf": false, "page": 39}];
+const KEY = 'natedu_quiz_v2';
+const LETTERS = ['أ','ب','ج','د','هـ','و','ز','ح'];
+const TOTAL = DATA.length;
+let answers = {};          // id -> chosen index
+let filter = {sec:'الكل', status:'all', q:''};
+
+try { answers = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ answers = {}; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(answers)); }catch(e){} }
+
+const $ = s => document.querySelector(s);
+const el = (t, c, h) => { const e=document.createElement(t); if(c) e.className=c; if(h!=null) e.innerHTML=h; return e; };
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => s.replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').toLowerCase();
+
+function optLabel(q, i){
+  if(q.tf) return i===0 ? 'صح (True)' : 'خطأ (False)';
+  return esc(q.opts[i]);
+}
+
+/* ---------- build ---------- */
+const sections = [...new Set(DATA.map(q=>q.sec))];
+const listEl = $('#list');
+const cards = {};
+
+function buildCards(){
+  let lastSec = null;
+  DATA.forEach(q=>{
+    if(q.sec !== lastSec){
+      const cnt = DATA.filter(x=>x.sec===q.sec).length;
+      const h = el('div','sec-title', `${esc(q.sec)} <small>(${cnt} سؤال)</small>`);
+      h.dataset.sec = q.sec; listEl.appendChild(h); lastSec = q.sec;
+    }
+    const card = el('article','q');
+    card.id = 'q'+q.id; card.dataset.sec = q.sec;
+    const head = el('div','q-head');
+    head.appendChild(el('div','num', q.id));
+    head.appendChild(el('h3','stem', esc(q.stem)));
+    card.appendChild(head);
+
+    const tags = el('div','tags');
+    tags.appendChild(el('span','tag', q.tf ? 'صح / خطأ' : 'اختيار من متعدد'));
+    if(q.inf) tags.appendChild(el('span','tag warn','إجابة مستنتجة (غير مظللة في الملف)'));
+    card.appendChild(tags);
+
+    const opts = el('div','opts'+(q.tf?' tf':''));
+    q.opts.forEach((o,i)=>{
+      const b = el('button','opt');
+      b.type='button'; b.dataset.i=i;
+      b.innerHTML = (q.tf ? '' : `<span class="ltr">${LETTERS[i]||i+1}</span>`) +
+                    `<span class="txt">${optLabel(q,i)}</span><span class="ico"></span>`;
+      b.addEventListener('click',()=>choose(q.id,i));
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+
+    const fb = el('div','fb'); card.appendChild(fb);
+    const foot = el('div','q-foot');
+    const rb = el('button','link','إعادة محاولة هذا السؤال'); rb.type='button'; rb.style.display='none';
+    rb.addEventListener('click',()=>{ delete answers[q.id]; save(); paint(q.id); updateStats(); applyFilter(); });
+    foot.appendChild(rb); card.appendChild(foot);
+
+    listEl.appendChild(card);
+    cards[q.id] = {card, opts, fb, rb, q};
+  });
+}
+
+/* ---------- paint one card ---------- */
+function paint(id){
+  const {card,opts,fb,rb,q} = cards[id];
+  const chosen = answers[id];
+  const reveal = $('#showAll').checked;
+  card.classList.remove('correct','wrong');
+  fb.className='fb'; fb.innerHTML='';
+  rb.style.display='none';
+  [...opts.children].forEach((b,i)=>{
+    b.className='opt'; b.disabled=false;
+    b.querySelector('.ico').textContent='';
+  });
+  const done = chosen !== undefined;
+  if(done){
+    const ok = chosen === q.ans;
+    card.classList.add(ok?'correct':'wrong');
+    [...opts.children].forEach((b,i)=>{
+      b.disabled = true;
+      if(i===q.ans){ b.classList.add('is-correct'); b.querySelector('.ico').textContent='✓'; }
+      else if(i===chosen){ b.classList.add('is-wrong'); b.querySelector('.ico').textContent='✗'; }
+      else b.classList.add('dim');
+    });
+    fb.classList.add('show', ok?'ok':'bad');
+    fb.innerHTML = ok
+      ? '✓ إجابة صحيحة، أحسنت!'
+      : `✗ إجابة خاطئة<span class="ans">الإجابة الصحيحة: <b>${q.tf?(q.ans===0?'صح (True)':'خطأ (False)'):esc(q.opts[q.ans])}</b></span>`;
+    rb.style.display='';
+  } else if(reveal){
+    [...opts.children].forEach((b,i)=>{ if(i===q.ans){ b.classList.add('is-correct'); b.querySelector('.ico').textContent='✓'; } });
+  }
+}
+
+function choose(id,i){
+  if(answers[id] !== undefined) return;
+  answers[id] = i; save();
+  const q = cards[id].q;
+  paint(id);
+  if(i !== q.ans){ cards[id].card.classList.add('shake'); setTimeout(()=>cards[id].card.classList.remove('shake'),400); }
+  updateStats();
+  applyFilter(true);
+  if(Object.keys(answers).length === TOTAL) setTimeout(showResult, 500);
+}
+
+/* ---------- stats ---------- */
+function counts(){
+  let ok=0,bad=0;
+  DATA.forEach(q=>{ const a=answers[q.id]; if(a!==undefined){ a===q.ans ? ok++ : bad++; } });
+  return {ok,bad,left:TOTAL-ok-bad};
+}
+function updateStats(){
+  const c = counts();
+  $('#sOk').textContent=c.ok; $('#sBad').textContent=c.bad; $('#sLeft').textContent=c.left;
+  const done=c.ok+c.bad;
+  $('#sProg').textContent = `${done} / ${TOTAL}`;
+  $('#sPct').textContent = done ? `الدقة ${Math.round(c.ok/done*100)}%` : '0%';
+  $('#tOk').style.width = (c.ok/TOTAL*100)+'%';
+  $('#tBad').style.width = (c.bad/TOTAL*100)+'%';
+}
+
+/* ---------- filters ---------- */
+function applyFilter(keepScroll){
+  const nq = norm(filter.q.trim());
+  let shown = 0;
+  const visSec = new Set();
+  DATA.forEach(q=>{
+    const {card} = cards[q.id];
+    const a = answers[q.id];
+    let ok = true;
+    if(filter.sec !== 'الكل' && q.sec !== filter.sec) ok=false;
+    if(filter.status==='todo' && a!==undefined) ok=false;
+    if(filter.status==='correct' && !(a!==undefined && a===q.ans)) ok=false;
+    if(filter.status==='wrong' && !(a!==undefined && a!==q.ans)) ok=false;
+    if(ok && nq){
+      const hay = norm(q.stem+' '+q.opts.join(' '));
+      if(!hay.includes(nq)) ok=false;
+    }
+    // while the user is answering, don't make the card vanish under their finger
+    if(keepScroll===true && card.dataset.keep==='1') ok=true;
+    card.style.display = ok ? '' : 'none';
+    if(ok){ shown++; visSec.add(q.sec); }
+  });
+  document.querySelectorAll('.sec-title').forEach(h=>{ h.style.display = visSec.has(h.dataset.sec)?'':'none'; });
+  $('#empty').style.display = shown ? 'none':'block';
+}
+
+function buildToolbar(){
+  const sp = $('#secPills');
+  const mk = (txt, val, cont, key)=>{
+    const b = el('button','pill'+(filter[key]===val?' on':''), esc(txt)); b.type='button';
+    b.addEventListener('click',()=>{
+      filter[key]=val; cont.querySelectorAll('.pill').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      applyFilter(); window.scrollTo({top:document.querySelector('.toolbar').offsetTop-10,behavior:'smooth'});
+    });
+    cont.appendChild(b);
+  };
+  mk('الكل (' + TOTAL + ')','الكل',sp,'sec');
+  sections.forEach(s=>mk(s,s,sp,'sec'));
+  const st = $('#statusPills');
+  [['الكل','all'],['لم تُحَل بعد','todo'],['صحيحة','correct'],['خاطئة','wrong']].forEach(([t,v])=>mk(t,v,st,'status'));
+  $('#search').addEventListener('input',e=>{ filter.q=e.target.value; applyFilter(); });
+  $('#showAll').addEventListener('change',()=>DATA.forEach(q=>paint(q.id)));
+  $('#retryWrong').addEventListener('click',retryWrong);
+  $('#resetAll').addEventListener('click',()=>{ if(confirm('سيتم مسح كل إجاباتك والبدء من جديد. هل أنت متأكد؟')) resetAll(); });
+  const tf = DATA.filter(q=>q.tf).length;
+  $('#chipsInfo').innerHTML = `<span>${TOTAL} سؤال</span><span>${sections.length} أقسام</span><span>${TOTAL-tf} اختيار من متعدد</span><span>${tf} صح / خطأ</span>`;
+}
+
+function retryWrong(){
+  let n=0;
+  DATA.forEach(q=>{ if(answers[q.id]!==undefined && answers[q.id]!==q.ans){ delete answers[q.id]; paint(q.id); n++; } });
+  save(); updateStats();
+  filter.status='all'; filter.sec='الكل';
+  document.querySelectorAll('#secPills .pill,#statusPills .pill').forEach(p=>p.classList.remove('on'));
+  document.querySelector('#secPills .pill').classList.add('on');
+  document.querySelector('#statusPills .pill').classList.add('on');
+  applyFilter();
+  if(!n) alert('لا توجد إجابات خاطئة لإعادتها 👌');
+}
+function resetAll(){
+  answers = {}; save();
+  DATA.forEach(q=>paint(q.id)); updateStats(); applyFilter();
+  $('#modal').classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- result ---------- */
+function showResult(){
+  const c = counts();
+  const pct = Math.round(c.ok/TOTAL*100);
+  $('#ring').style.setProperty('--p',pct);
+  $('#ringTxt').textContent = pct+'%';
+  $('#mTitle').textContent = pct>=90?'ممتاز! 🏆':pct>=75?'جيد جداً 👏':pct>=50?'جيد، تابع المراجعة 💪':'حاول مرة أخرى 📚';
+  $('#mSub').textContent = `أجبت صح على ${c.ok} من ${TOTAL} سؤال، وأخطأت في ${c.bad}.`;
+  $('#mWrong').style.display = c.bad ? '' : 'none';
+  $('#modal').classList.add('show');
+}
+$('#mClose').addEventListener('click',()=>$('#modal').classList.remove('show'));
+$('#mReset').addEventListener('click',resetAll);
+$('#mWrong').addEventListener('click',()=>{
+  $('#modal').classList.remove('show');
+  filter.status='wrong';
+  document.querySelectorAll('#statusPills .pill').forEach((p,i)=>p.classList.toggle('on',i===3));
+  applyFilter(); window.scrollTo({top:document.querySelector('.toolbar').offsetTop-10,behavior:'smooth'});
+});
+$('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') $('#modal').classList.remove('show'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('#modal').classList.remove('show'); });
+
+/* theme + scroll */
+$('#themeBtn').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme==='dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+const tt=$('#toTop');
+addEventListener('scroll',()=>tt.classList.toggle('show',scrollY>600),{passive:true});
+tt.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+
+/* floating coffee beans */
+(function(){
+  const box=document.getElementById('beans'); if(!box) return;
+  const svg=c=>`<svg viewBox="0 0 40 56" xmlns="http://www.w3.org/2000/svg"><ellipse cx="20" cy="28" rx="16" ry="25" fill="${c}"/><path d="M20 5C10 20 30 34 20 51" fill="none" stroke="var(--bg)" stroke-width="4" stroke-linecap="round"/></svg>`;
+  const N=matchMedia('(max-width:560px)').matches?16:28;
+  for(let i=0;i<N;i++){
+    const b=document.createElement('div'); b.className='bean';
+    const s=18+Math.random()*34;
+    b.style.cssText=`left:${Math.random()*100}%;width:${s}px;height:${s*1.4}px;--o:${(.3+Math.random()*.35).toFixed(2)};--dx:${(Math.random()*160-80).toFixed(0)}px;--rot:${(Math.random()*540-270).toFixed(0)}deg;animation-duration:${(14+Math.random()*18).toFixed(1)}s;animation-delay:${(-Math.random()*30).toFixed(1)}s`;
+    b.innerHTML=svg(i%2?'var(--bean-a)':'var(--bean-b)');
+    box.appendChild(b);
+  }
+})();
+
+/* init */
+buildCards(); buildToolbar();
+DATA.forEach(q=>paint(q.id));
+updateStats(); applyFilter();
+</script>
+</body>
+</html>
